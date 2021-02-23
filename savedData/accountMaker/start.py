@@ -1,15 +1,14 @@
-import accounts
 import os
 tries=0
 newUser=input("Are you a new user?(yes or no): ").lower()
 if newUser == "yes":
     username=input("Please enter a username.: ")
     pin=input("Please enter a pin.: ")
-    pData = pin
+    pData = int(pin)
     os.chdir("accounts")
     fileName='{}.py'.format(username)
     with open(fileName, 'a') as f:
-        f.write('userPin = "{}"'.format(pData))
+        f.write('"userPin =" \n{}'.format(pData))
     f.close()
     os.chdir("..")
 elif newUser == "no":
@@ -19,11 +18,19 @@ elif newUser == "no":
         while True:
             if tries < 3:
                 entPin=int(input("What is your pin?: "))
-                if entPin == accounts.entUser.userPin:
-                    break
+                tries+=1
+                global accounts
+                namUser=entUser+".py"
+                with open(namUser, 'r') as f:
+                    acPin="placeholder"# Just a placeholder for acPin
+                    f.readline()
+                    acPin=int(f.readline())
+                if entPin == acPin:
                     print("You are",entUser+"!")
+                    break
             elif tries == 3:
                 print("You entered the pin wrong 3 times.")
+                break
     else:
         print("Didn't work")
 
